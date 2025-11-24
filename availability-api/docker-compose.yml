@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: availability-db
+    restart: always
+    environment:
+      POSTGRES_DB: availabilitydb
+      POSTGRES_USER: availabilityuser
+      POSTGRES_PASSWORD: availabilitypass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  availability-app:
+    build:
+      dockerfile: Dockerfile
+    container_name: availability-api
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/availabilitydb
+      SPRING_DATASOURCE_USERNAME: availabilityuser
+      SPRING_DATASOURCE_PASSWORD: availabilitypass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:

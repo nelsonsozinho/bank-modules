@@ -1,0 +1,28 @@
+# Spring Boot configuration
+spring:
+  config:
+    import: env.properties
+  profiles:
+    active: dev
+  application:
+    name: bank
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_DATABASE_HOST}:5432/${DB_DATABASE}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVER}:${BOOTSTRAP_PORT}
+    consumer:
+      group-id: contract-loans
+
+server:
+  port: 8080
+topic:
+  name:
+    consumer: loan-contract-accept

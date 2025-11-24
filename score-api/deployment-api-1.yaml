@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: score-api-1-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: score-api-1
+  template:
+    metadata:
+      labels:
+        app: score-api-1
+    spec:
+      containers:
+        - name: score-api-1
+          image: score-api-1 # Replace with your image name
+          ports:
+            - containerPort: 8080

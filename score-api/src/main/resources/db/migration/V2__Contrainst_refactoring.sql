@@ -1,0 +1,2 @@
+ALTER TABLE client DROP CONSTRAINT IF EXISTS fk_score_client;
+ALTER TABLE client DROP COLUMN IF EXISTS score_id;

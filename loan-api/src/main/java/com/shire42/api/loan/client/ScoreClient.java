@@ -1,0 +1,19 @@
+package com.shire42.api.loan.client;
+
+import com.shire42.api.loan.client.dto.ClientRestriction;
+import com.shire42.api.loan.client.dto.ClientScore;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
+
+@FeignClient(
+        name = "${api.score.name}",
+        url = "${api.score.url}")
+public interface ScoreClient {
+
+    @GetMapping("/client/{cpf}")
+    ClientScore getScoreUser(@PathVariable("cpf") String cpf);
+
+}
