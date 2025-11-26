@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bank-api
+  template:
+    metadata:
+      labels:
+        app: bank-api
+    spec:
+      containers:
+        - name: bank-api
+          image: nelsonsozinho/bank.api:latest
+          env:
+            - name: DB_DATABASE_HOST
+              value: postgres
+            - name: DB_DATABASE
+              value: bank
+            - name: DB_USER
+              value: postgres
+            - name: DB_PASSWORD
+              value: postgres
+            - name: BOOTSTRAP_SERVER
+              value: kafka
+            - name: BOOTSTRAP_PORT
+              value: "29092"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bank-api
+spec:
+  selector:
+    app: bank-api
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30282
+  type: ClusterIP
