@@ -2,6 +2,9 @@ package com.shire42.api.loan.service.impl;
 
 import com.shire42.api.loan.client.async.EventService;
 import com.shire42.api.loan.client.async.dto.LoanContractDTO;
+import com.shire42.api.loan.controllers.rest.out.ContractRestResponse;
+import com.shire42.api.loan.controllers.rest.out.ProductRestResponse;
+import com.shire42.api.loan.controllers.rest.out.SimulationResponse;
 import com.shire42.api.loan.model.Contract;
 import com.shire42.api.loan.model.Simulation;
 import com.shire42.api.loan.repository.ContractRepository;
@@ -9,10 +12,12 @@ import com.shire42.api.loan.repository.SimulationRepository;
 import com.shire42.api.loan.service.ContractService;
 import com.shire42.api.loan.service.dto.ContractDto;
 import com.shire42.api.loan.service.dto.SimulationDto;
+
 import com.shire42.api.loan.service.exception.ContractAlreadyCompletedException;
 import com.shire42.api.loan.service.exception.ContractNotFoundException;
 import com.shire42.api.loan.service.exception.SimulationNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +35,28 @@ public class ContractServiceImpl implements ContractService {
     private final EventService eventService;
 
     @Override
-    public List<Contract> listAllActiveContractsByUser(final String cpf) {
-        return contractRepository.findContractsActivatedYet(cpf);
+    @Cacheable(value = "listAllActiveContractCache", key = "#cpf")
+    public List<ContractRestResponse> listAllActiveContractsByUser(final String cpf) {
+        return contractRepository.findContractsActivatedYet(cpf).stream().map(
+                x -> new ContractRestResponse(
+                        x.getId(),
+                        x.getText(),
+                        x.getIsAssign(),
+                        x.getCompleted(),
+                        new ProductRestResponse(
+                            x.getProduct().getId(),
+                            x.getProduct().getDescription(),
+                            x.getProduct().getMinValue(),
+                            x.getProduct().getMaxValue()
+                        ),
+                        x.getSimulations().stream().map(simulation -> new SimulationResponse(
+                            simulation.getId(),
+                            simulation.getInstallmentSize(),
+                            simulation.getIsEffective(),
+                            simulation.getTotal()
+                        )).toList()
+                )
+        ).toList();
     }
 
     @Override

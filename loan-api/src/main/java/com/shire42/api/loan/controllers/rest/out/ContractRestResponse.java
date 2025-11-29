@@ -1,5 +1,6 @@
 package com.shire42.api.loan.controllers.rest.out;
 
+import java.io.Serializable;
 import java.util.List;
 
 public record ContractRestResponse(
@@ -9,7 +10,7 @@ public record ContractRestResponse(
         Boolean completed,
         ProductRestResponse product,
         List<SimulationResponse> simulations
-)
+) implements Serializable
 {
 
 }

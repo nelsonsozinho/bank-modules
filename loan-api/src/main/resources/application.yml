@@ -23,6 +23,14 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     template:
       default-topic: loan-contract-accept
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+  cache:
+    type: ${CACHE_TYPE:redis}
+    redis:
+      time-to-live: 100000
 
 server:
   port: 8080

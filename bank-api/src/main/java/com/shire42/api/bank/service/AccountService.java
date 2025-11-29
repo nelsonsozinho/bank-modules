@@ -1,13 +1,13 @@
 package com.shire42.api.bank.service;
 
-import com.shire42.api.bank.domain.model.Account;
+import com.shire42.api.bank.domain.model.rest.out.AccountOutRest;
 import com.shire42.api.bank.service.transaction.TransactionType;
 
 import java.math.BigDecimal;
 
 public interface AccountService {
 
-    Account getAccountByIp(final String accountNumber);
+    AccountOutRest getAccountById(final String accountNumber);
 
     void makeDeposit(final String clientId, final String accountNumber, final BigDecimal amount, final TransactionType type);
 

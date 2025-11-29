@@ -20,7 +20,14 @@ spring:
     bootstrap-servers: ${BOOTSTRAP_SERVER}:${BOOTSTRAP_PORT}
     consumer:
       group-id: contract-loans
-
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+  cache:
+    type: ${CACHE_TYPE:redis}
+    redis:
+      time-to-live: 10000
 server:
   port: 8080
 topic:

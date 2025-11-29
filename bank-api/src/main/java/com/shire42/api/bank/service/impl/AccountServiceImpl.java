@@ -2,6 +2,7 @@ package com.shire42.api.bank.service.impl;
 
 import com.shire42.api.bank.domain.model.Account;
 import com.shire42.api.bank.domain.model.Transaction;
+import com.shire42.api.bank.domain.model.rest.out.AccountOutRest;
 import com.shire42.api.bank.domain.repository.AccountRepository;
 import com.shire42.api.bank.domain.repository.TransactionRepository;
 import com.shire42.api.bank.service.AccountService;
@@ -9,6 +10,7 @@ import com.shire42.api.bank.service.exceptions.BankAccountsNotFoundException;
 import com.shire42.api.bank.service.exceptions.InsuficientFoundsException;
 import com.shire42.api.bank.service.transaction.TransactionType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,10 +27,15 @@ public class AccountServiceImpl implements AccountService {
 
     private final TransactionRepository transactionRepository;
 
-    public Account getAccountByIp(final String accountNumber) {
-        Account ccount = repository.findByNumber(accountNumber);
-        validateBankAccount(ccount, accountNumber);
-        return repository.findByNumber(accountNumber);
+    @Override
+    @Cacheable(value = "accountCache", key = "#accountNumber")
+    public AccountOutRest getAccountById(final String accountNumber) {
+        Account account = repository.findByNumber(accountNumber);
+        return  AccountOutRest.builder()
+                .accountId(account.getId())
+                .balance(BigDecimal.valueOf(account.getBalance()))
+                .number(account.getNumber())
+                .build();
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)

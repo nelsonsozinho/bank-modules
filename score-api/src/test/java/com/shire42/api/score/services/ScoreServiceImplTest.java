@@ -1,5 +1,6 @@
 package com.shire42.api.score.services;
 
+import com.shire42.api.score.controllers.rest.out.ScoreRestOut;
 import com.shire42.api.score.model.Client;
 import com.shire42.api.score.model.Score;
 import com.shire42.api.score.repository.ClientRepository;
@@ -92,11 +93,13 @@ class ScoreServiceImplTest {
     void findScoreByClientCpf_returnsScoreWhenFound() {
         String cpf = "99988877766";
         Score s = new Score();
+        s.setId(1L);
+        s.setScore(1000D);
         when(repository.findByClientCpf(cpf)).thenReturn(Optional.of(s));
 
-        Score result = service.findScoreByClientCpf(cpf);
+        ScoreRestOut result = service.findScoreByClientCpf(cpf);
 
-        assertSame(s, result);
+        assertEquals(new BigDecimal(s.getScore()), result.getScore());
     }
 
     @Test

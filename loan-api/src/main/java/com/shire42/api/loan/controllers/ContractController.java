@@ -24,34 +24,7 @@ public class ContractController {
 
     @GetMapping("/{cpf}")
     public ResponseEntity<?> listContractsByUser(@PathVariable("cpf") String cpf) {
-        var responseList = new ArrayList<>();
-        contractService.listAllActiveContractsByUser(cpf)
-                .forEach(x -> {
-                    var product = x.getProduct();
-                    var response = new ContractRestResponse(
-                            x.getId(),
-                            x.getText(),
-                            x.getIsAssign(),
-                            x.getCompleted(),
-                            new ProductRestResponse(
-                                    product.getId(),
-                                    product.getDescription(),
-                                    product.getMinValue(),
-                                    product.getMaxValue()
-                            ),
-                            x.getSimulations().stream()
-                                    .map(s -> {
-                                        return new SimulationResponse(
-                                                s.getId(),
-                                                s.getInstallmentSize(),
-                                                s.getIsEffective(),
-                                                s.getTotal());
-                                    }).toList()
-                    );
-                    responseList.add(response);
-                });
-
-        return ResponseEntity.ok(responseList);
+        return ResponseEntity.ok(contractService.listAllActiveContractsByUser(cpf));
     }
 
     @PatchMapping("/{contractId}/simulation/{simulationId}/deal")

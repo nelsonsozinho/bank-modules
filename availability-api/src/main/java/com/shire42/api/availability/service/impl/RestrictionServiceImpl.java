@@ -10,6 +10,7 @@ import com.shire42.api.availability.service.exception.ClientNotFoundException;
 import com.shire42.api.availability.service.exception.RestrictionNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +28,10 @@ public class RestrictionServiceImpl implements RestrictionService {
     private final ClientRepository clientRepository;
 
     @Override
-    public RestrictionDto getRestrictionById(final Long id) {
-        final FinancialRestriction restriction = repository.findById(id).orElseThrow(() ->
-                new RestrictionNotFoundException(String.format("Restriction with id %s not fount", id)));
+    @Cacheable(value = "restrictionCache", key = "#restrictionId")
+    public RestrictionDto getRestrictionById(final Long restrictionId) {
+        final FinancialRestriction restriction = repository.findById(restrictionId).orElseThrow(() ->
+                new RestrictionNotFoundException(String.format("Restriction with id %s not fount", restrictionId)));
         return RestrictionDto.builder()
                 .lastUpdate(restriction.getLastUpdate())
                 .source(restriction.getSource())
@@ -39,6 +41,7 @@ public class RestrictionServiceImpl implements RestrictionService {
     }
 
     @Override
+    @Cacheable(value = "listRestrictionsCache", key = "#cpf")
     public List<RestrictionDto> listCreditRestrictions(final String cpf) {
         return repository.findByCpf(cpf).stream()
                 .map(r -> RestrictionDto.builder()

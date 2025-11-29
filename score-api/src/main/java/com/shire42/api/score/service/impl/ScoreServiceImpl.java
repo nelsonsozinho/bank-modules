@@ -1,5 +1,6 @@
 package com.shire42.api.score.service.impl;
 
+import com.shire42.api.score.controllers.rest.out.ScoreRestOut;
 import com.shire42.api.score.model.Client;
 import com.shire42.api.score.model.Score;
 import com.shire42.api.score.repository.ClientRepository;
@@ -8,6 +9,7 @@ import com.shire42.api.score.service.ScoreService;
 import com.shire42.api.score.service.exception.ClientNotFoundException;
 import com.shire42.api.score.service.exception.ClientScoreNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +26,15 @@ public class ScoreServiceImpl implements ScoreService {
     private final ClientRepository clientRepository;
 
     @Override
-    public Score findScoreByClientCpf(final String cpf) {
-        return repository.findByClientCpf(cpf).orElseThrow(() ->
-                new ClientScoreNotFoundException(String.format("Score from client %s not found", cpf)));
+    @Cacheable(value = "scoreClientCache", key = "#cpf")
+    public ScoreRestOut findScoreByClientCpf(final String cpf) {
+        Score score = repository.findByClientCpf(cpf)
+                .orElseThrow(() -> new ClientScoreNotFoundException(String.format("Score from client %s not found", cpf)));
+        return ScoreRestOut.builder()
+                .cpf(cpf)
+                .lastUpdate(score.getLastUpdate())
+                .score(new BigDecimal(score.getScore()))
+                .build();
     }
 
     @Override

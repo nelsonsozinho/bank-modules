@@ -26,12 +26,7 @@ public class ScoreController {
 
     @GetMapping("/client/{cpf}")
     public ResponseEntity<ScoreRestOut> getAccountByNumber(@PathVariable("cpf") final String cpf) {
-        var score = accountService.findScoreByClientCpf(cpf);
-        return ResponseEntity.ok(ScoreRestOut.builder()
-                .cpf(cpf)
-                .lastUpdate(score.getLastUpdate())
-                .score(new BigDecimal(score.getScore()))
-                .build());
+        return ResponseEntity.ok(accountService.findScoreByClientCpf(cpf));
     }
 
     @PostMapping

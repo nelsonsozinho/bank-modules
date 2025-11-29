@@ -9,6 +9,7 @@ import com.shire42.api.availability.service.dto.ClientDto;
 import com.shire42.api.availability.service.dto.RestrictionDto;
 import com.shire42.api.availability.service.exception.ClientNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ public class ClientServiceImp implements ClientService {
 
 
     @Override
+    @Cacheable(value = "clientCache", key = "#cpf")
     public ClientDto getClientByCpf(final String cpf) {
         Client client = repository.findByCpf(cpf).orElseThrow(() -> new ClientNotFoundException(String.format("Client with cpf %s not found", cpf)));
         return ClientDto.builder()

@@ -21,6 +21,7 @@ import com.shire42.api.loan.service.exception.ClientWithInsufficientScoreExcepti
 import com.shire42.api.loan.service.exception.ClientWithRestrictionsException;
 import com.shire42.api.loan.service.exception.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +55,7 @@ public class SimulationServiceImp implements SimulationService {
 
 
     @Override
+    @Cacheable(value = "simulationListCacheCache", key = "{#productId, #cpf}")
     public List<SimulationResponse> listSimulationsByProduct(Long productId, String cpf) {
         return repository.listSimulationsFromProductAndClient(productId, cpf)
                 .stream()

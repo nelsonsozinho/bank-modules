@@ -3,11 +3,12 @@ package com.shire42.api.availability.service.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Builder
 @Getter
-public class ClientDto {
+public class ClientDto implements Serializable {
 
     private Long id;
     private String cpf;
