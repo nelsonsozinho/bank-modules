@@ -1,32 +1,28 @@
 # Bank Loan Process
 
 ## Description
-- This project is 100% didadic. There are some architectural gaps, missing integrations and several fails
-in the source code and test missing (I'm work on it).
+- This project is fully didactic. It contains some architectural gaps, missing integrations, and several issues in the source code. Tests are also missing — I’m working on that.
 
-- The project consist in four microservices working together to provider a loan basic service. This project try to
-simulate the access to internal/external services with the goal to check if the client is available to proceed the loan deel.
+- The project consists of four microservices working together to provide a basic loan service. It simulates access to internal and external systems with the goal of verifying whether a client is eligible to proceed with a loan request.
 
-- Does not have any implementations about security, ex: JWT, SSL, Certificates, etc. I'm working on it. 
-Remember, this project is just for fun. My main target was to make the loan process works.   
+- There is no security implementation yet (e.g., JWT, SSL, certificates). I’m working on it.
+  Remember: this project is just for fun, and the main goal is to make the loan process work.   
 
-- Enjoy it if you want to learn about the transaction and loans process over a microservice 
-environment. 
+- Feel free to explore it if you want to learn how transactions and loan processes work in a microservices environment. 
 ## Microservices
 - Availability
-  - Microservice with target to check if the client has some financial restriction.  
+  - Checks whether the client has any financial restrictions.  
   
 - Score
-  - Simple score check. 
+  - Performs a simple credit score evaluation.
 
 - Bank 
-  - This microservice provide some functionalities to make deposit, withdrawal, and transfer.   
+  - Provides basic banking operations such as deposit, withdrawal, and transfer.   
 
 - Loan
-  - Most important microservice that make this process works. This module har some integration with all microservices 
-  of this project.
-  - This module will communicate with all modules. To deal a loan, the bank need to check if the client has some 
-  financial issues.
+  - The most important microservice — it orchestrates the entire loan process.
+    It integrates with all other microservices in the project.
+    To approve a loan, it must communicate with the other modules to verify whether the client has any financial issues.
 
 ## Dependencies
 - Postgres
