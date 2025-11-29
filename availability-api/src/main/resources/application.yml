@@ -1,4 +1,12 @@
 # Spring Boot configuration
+server:
+  http2:
+    enabled: true
+  ssl:
+    enabled: true
+    key-store: http2/api-keystore.p12
+    key-store-password: superuser
+    key-store-type: PKCS12
 spring:
   config:
     import: env.properties

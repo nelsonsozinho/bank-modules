@@ -1,4 +1,13 @@
 # Spring Boot configuration
+server:
+  http2:
+    enabled: true
+  ssl:
+    enabled: true
+    key-store: http2/api-keystore.p12
+    key-store-password: superuser
+    key-store-type: PKCS12
+  port: 8080
 spring:
   config:
     import: env.properties
@@ -31,10 +40,6 @@ spring:
     type: ${CACHE_TYPE:redis}
     redis:
       time-to-live: 100000
-
-server:
-  port: 8080
-
 topic:
   name:
     producer: loan-contract-accept
