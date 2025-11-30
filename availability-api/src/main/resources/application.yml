@@ -4,9 +4,9 @@ server:
     enabled: true
   ssl:
     enabled: true
-    key-store: http2/api-keystore.p12
-    key-store-password: superuser
-    key-store-type: PKCS12
+    key-store: ${KEY_STORE_FILE_VALUE}
+    key-store-password: ${KEY_STORE_PASSWORD_VALUE}
+    key-store-type: ${KEY_STORE_TYPE}
 spring:
   config:
     import: env.properties

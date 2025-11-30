@@ -6,6 +6,7 @@ WORKDIR /app
 
 # Step 3: Copy the JAR built from Maven/Gradle into container
 COPY build/libs/api.bank-0.0.1-SNAPSHOT.jar app.jar
+COPY build/libs/api-keystore.p12 api-keystore.p12
 
 # Step 4: Run Spring Boot app
 ENTRYPOINT ["java","-jar","app.jar"]

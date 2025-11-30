@@ -25,7 +25,7 @@ public class AccountController {
 
     @GetMapping("/{accountNumber}")
     public ResponseEntity<AccountOutRest> getAccountByNumber(@PathVariable("accountNumber") final String accountNumber) {
-        return ResponseEntity.ok(accountService.getAccountById(accountNumber));
+        return ResponseEntity.ok(accountService.getAccountByAccountNumber(accountNumber));
     }
 
     @PostMapping("/transfer")

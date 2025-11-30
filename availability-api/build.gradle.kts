@@ -24,6 +24,17 @@ repositories {
 	mavenCentral()
 }
 
+
+val keystoreFile: File = file("../http2/api-keystore.p12").absoluteFile
+tasks.register<Copy>("copyKeystore") {
+    from(keystoreFile)
+    into("$buildDir/libs")
+}
+
+tasks.named("build") {
+    dependsOn("copyKeystore")
+}
+
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")

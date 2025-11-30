@@ -29,7 +29,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Cacheable(value = "accountCache", key = "#accountNumber")
-    public AccountOutRest getAccountById(final String accountNumber) {
+    public AccountOutRest getAccountByAccountNumber(final String accountNumber) {
         Account account = repository.findByNumber(accountNumber);
         return  AccountOutRest.builder()
                 .accountId(account.getId())

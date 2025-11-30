@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 public interface AccountService {
 
-    AccountOutRest getAccountById(final String accountNumber);
+    AccountOutRest getAccountByAccountNumber(final String accountNumber);
 
     void makeDeposit(final String clientId, final String accountNumber, final BigDecimal amount, final TransactionType type);
 
