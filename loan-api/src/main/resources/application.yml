@@ -7,7 +7,7 @@ server:
     key-store: ${KEY_STORE_FILE_VALUE}
     key-store-password: ${KEY_STORE_PASSWORD_VALUE}
     key-store-type: ${KEY_STORE_TYPE}
-  port: 8080
+  port: 8282
 spring:
   config:
     import: env.properties
@@ -45,8 +45,8 @@ topic:
     producer: loan-contract-accept
 api:
   availability:
-    url: ${AVAILABILITY_API:http://localhost:8080/restriction}
+    url: ${AVAILABILITY_API:https://localhost:8080/restriction}
     name: availability
   score:
-    url: ${SCORE_API:http://localhost:8383/score}
+    url: ${SCORE_API:https://localhost:8080/score}
     name: score

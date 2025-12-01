@@ -1,5 +1,6 @@
 package com.shire42.api.loan.client;
 
+import com.shire42.api.loan.client.configuration.FeignSslConfig;
 import com.shire42.api.loan.client.dto.ClientRestriction;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +10,8 @@ import java.util.List;
 
 @FeignClient(
         name = "${api.availability.name}",
-        url = "${api.availability.url}")
+        url = "${api.availability.url}",
+        configuration = FeignSslConfig.class)
 public interface AvailabilityClient {
 
     @GetMapping("/client/{cpf}")

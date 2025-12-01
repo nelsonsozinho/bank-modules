@@ -1,5 +1,6 @@
 package com.shire42.api.loan.client;
 
+import com.shire42.api.loan.client.configuration.FeignSslConfig;
 import com.shire42.api.loan.client.dto.ClientRestriction;
 import com.shire42.api.loan.client.dto.ClientScore;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -10,7 +11,8 @@ import java.util.List;
 
 @FeignClient(
         name = "${api.score.name}",
-        url = "${api.score.url}")
+        url = "${api.score.url}",
+        configuration = FeignSslConfig.class)
 public interface ScoreClient {
 
     @GetMapping("/client/{cpf}")
