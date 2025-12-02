@@ -22,4 +22,14 @@ public interface SimulationRepository extends JpaRepository<Simulation, Long> {
             "and simulation.isEffective = false")
     List<Simulation> listSimulationsFromProductAndClient(@Param("productId") Long productId, @Param("cpf")String cpf);
 
+    @Query("from Simulation as simulation " +
+            "join simulation.product as product " +
+            "where simulation.isEffective = false " +
+            "and simulation.installmentSize = :instalmentSize " +
+            "and simulation.total = :value " +
+            "and product.id = :productId ")
+    List<Simulation> listWithSameValueAndNotEffective(@Param("instalmentSize") Integer installmentSize,
+                                                      @Param("value") Double value,
+                                                      @Param("productId") Long productId);
+
 }

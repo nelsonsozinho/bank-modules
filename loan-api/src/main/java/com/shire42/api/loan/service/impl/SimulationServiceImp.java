@@ -20,6 +20,7 @@ import com.shire42.api.loan.service.dto.SimulationResponse;
 import com.shire42.api.loan.service.exception.ClientWithInsufficientScoreException;
 import com.shire42.api.loan.service.exception.ClientWithRestrictionsException;
 import com.shire42.api.loan.service.exception.ProductNotFoundException;
+import com.shire42.api.loan.service.exception.SimulationNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -67,6 +68,7 @@ public class SimulationServiceImp implements SimulationService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public SimulationResponse newSimulation(final SimulationDto simulationDto) {
         validateRestrictions(simulationDto);
+        hasSimulationWithSameValue(simulationDto.getProductId(), simulationDto.getInstalments(), simulationDto.getValue());
 
         final Client client = clientRepository.findClientByCpf(simulationDto.getCpf()).orElseThrow(() ->
                 new ProductNotFoundException(String.format("CLeint with cpf %s not found", simulationDto.getCpf())));
@@ -83,6 +85,13 @@ public class SimulationServiceImp implements SimulationService {
         List<Installment> installments = createInstalments(simulation,simulation.getInstallmentSize());
         newSimulation.setInstallments(installments);
         return simulationToResponse(simulationRepository.save(newSimulation));
+    }
+
+    private void hasSimulationWithSameValue(Long productId, Integer installmentSize, Double value) {
+        List<Simulation> simulations = simulationRepository.listWithSameValueAndNotEffective(installmentSize, value, productId);
+        if(!simulations.isEmpty()) {
+            throw new SimulationNotFoundException("There is already simulation with the same value!");
+        }
     }
 
     private Contract createNewContract(Client client, String bancAccountNumber, Product product) {

@@ -8,6 +8,7 @@ import com.shire42.api.loan.service.exception.ContractAlreadyCompletedException;
 import com.shire42.api.loan.service.exception.ContractNotFoundException;
 import com.shire42.api.loan.service.exception.ProductNotFoundException;
 import com.shire42.api.loan.service.exception.SimulationNotFoundException;
+import com.shire42.api.loan.service.exception.SimulationWithSameValueException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,6 +73,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ClientWithInsufficientScoreException.class)
     public ResponseEntity<Map<String, List<String>>> handleClientWitInsufficientFounds(ClientWithInsufficientScoreException ex) {
+        final List<String> errors = List.of(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SimulationWithSameValueException.class)
+    public ResponseEntity<Map<String, List<String>>> handleSimulationWithSameValue(SimulationWithSameValueException ex) {
         final List<String> errors = List.of(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
