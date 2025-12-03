@@ -1,5 +1,6 @@
 package com.shire42.client.domain.service;
 
+import com.shire42.client.domain.exception.ClientAlreadyExistsException;
 import com.shire42.client.domain.exception.ClientNotFountException;
 import com.shire42.client.domain.model.Client;
 import com.shire42.client.domain.repository.ClientRepository;
@@ -9,6 +10,8 @@ import com.shire42.client.domain.rest.out.ClientDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +33,7 @@ public class ClientService {
 
     @Transactional
     public ClientDto saveNewClient(ClientRest clientRest) {
+        validateClient(clientRest);
         Client newClient = clientRepository.save(Client.builder()
                 .cpf(clientRest.cpf())
                 .email(clientRest.email())
@@ -37,6 +41,23 @@ public class ClientService {
                 .rg(clientRest.rg())
                 .build());
         return clientToClientDto(newClient);
+    }
+
+    private void validateClient(ClientRest clientRest) {
+        Optional<Client> clientEmail = clientRepository.findByEmail(clientRest.email());
+        Optional<Client> clientCpf = clientRepository.findByCpf(clientRest.email());
+        Optional<Client> clientRg = clientRepository.findByRg(clientRest.email());
+
+        if (clientEmail.isPresent()) {
+            throw new ClientAlreadyExistsException(
+                    String.format("Client with email %s already exists.", clientRest.email()));
+        } else if(clientCpf.isPresent()) {
+            throw new ClientAlreadyExistsException(
+                    String.format("Client with cpf %s already exists.", clientRest.cpf()));
+        } else if(clientRg.isPresent()) {
+            throw new ClientAlreadyExistsException(
+                    String.format("Client with rg %s already exists.", clientRest.rg()));
+        }
 
     }
 

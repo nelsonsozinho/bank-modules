@@ -1,5 +1,6 @@
 package com.shire42.client.controller.handler;
 
+import com.shire42.client.domain.exception.ClientAlreadyExistsException;
 import com.shire42.client.domain.exception.ClientNotFountException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ClientNotFountException.class)
     public ResponseEntity<Map<String, List<String>>> handleClientFounds(ClientNotFountException ex) {
+        final List<String> errors = List.of(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ClientAlreadyExistsException.class)
+    public ResponseEntity<Map<String, List<String>>> handleClientFounds(ClientAlreadyExistsException ex) {
         final List<String> errors = List.of(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }

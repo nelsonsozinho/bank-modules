@@ -13,6 +13,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AddressService {
@@ -29,8 +31,18 @@ public class AddressService {
                 () -> new ClientNotFountException(String.format("Client with id %d is not found", clientId)));
         Address address = addressMapping.addressRestToAddress(addressRest);
         address.setClient(client);
+
+        validateOfficialAddress(address.getIsOfficialAddress(), clientId);
         Address newAddress = addressRepository.save(address);
+
         return addressMapping.addressToAddressDto(newAddress);
+    }
+
+    public void validateOfficialAddress(Boolean isOfficialAddress, Long clientId) {
+        Optional<Address> address = addressRepository.findOfficialAddressByClientId(clientId);
+        if (address.isPresent() && isOfficialAddress) {
+            addressRepository.updateAllAddressFromUser(clientId);
+        }
     }
 
     public AddressDto getOfficialClientByAddress(Long clientId) {
