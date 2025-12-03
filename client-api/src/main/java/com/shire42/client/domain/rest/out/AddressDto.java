@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Getter
 public class AddressDto implements Serializable {
 
-    private Long addressId;
+    private Long idAddress;
 
     private String street;
 
