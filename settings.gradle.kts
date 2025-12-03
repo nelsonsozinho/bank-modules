@@ -12,3 +12,4 @@ plugins {
 
 rootProject.name = "bank-modules"
 include("availability-api", "bank-api", "loan-api", "score-api")
+include("client-api")
