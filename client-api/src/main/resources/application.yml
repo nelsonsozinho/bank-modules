@@ -1,0 +1,47 @@
+spring:
+  config:
+    import: env.properties
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_DATABASE_HOST}:5432/${DB_DATABASE}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 30000
+      connection-timeout: 30000
+      max-lifetime: 1800000
+      auto-commit: true
+      pool-name: ClientDefaultHikariPool
+      register-mbeans: true
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  application:
+    name: client-api
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+  cache:
+    redis:
+      time-to-live: 10000
+    type: ${CACHE_TYPE:redis}
+server:
+  http2:
+    enabled: true
+  ssl:
+    enabled: true
+    key-store: ${KEY_STORE_FILE_VALUE}
+    key-store-password: ${KEY_STORE_PASSWORD_VALUE}
+    key-store-type: ${KEY_STORE_TYPE}
+logging:
+  level:
+    com:
+      zaxxer:
+        hikari: TRACE
