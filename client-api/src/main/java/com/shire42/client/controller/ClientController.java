@@ -27,7 +27,7 @@ public class ClientController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<ClientDto> getClientById(@PathVariable("email") String email) {
+    public ResponseEntity<ClientDto> getClientByEmail(@PathVariable("email") String email) {
         return ResponseEntity.ok(clientService.findClientByEmail(email));
     }
 

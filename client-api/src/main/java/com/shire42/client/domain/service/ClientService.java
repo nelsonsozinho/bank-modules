@@ -68,7 +68,9 @@ public class ClientService {
                 .name(client.getName())
                 .email(client.getEmail())
                 .rg(client.getRg())
-                .addresses(client.getAddresses().stream().map(
+                .addresses(client.getAddresses().stream()
+                        .filter(a -> a.getIsOfficialAddress() == true)
+                        .map(
                                 a -> AddressDto.builder()
                                         .idAddress(a.getId())
                                         .country(a.getCountry())
