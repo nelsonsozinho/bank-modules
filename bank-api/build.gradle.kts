@@ -37,7 +37,11 @@ tasks.named("build") {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.flywaydb:flyway-core")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign:4.3.0")
+    implementation("io.github.openfeign:feign-httpclient")
+    implementation("io.github.openfeign:feign-httpclient:13.6")
+    implementation("org.apache.httpcomponents.core5:httpcore5:5.3.6")
+    implementation("org.flywaydb:flyway-core")
 	implementation("org.flywaydb:flyway-database-postgresql")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")

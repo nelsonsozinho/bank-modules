@@ -1,7 +1,8 @@
 package com.shire42.api.bank.controllers.handler;
 
-import com.shire42.api.bank.service.exceptions.BankAccountsNotFoundException;
-import com.shire42.api.bank.service.exceptions.InsuficientFoundsException;
+import com.shire42.api.bank.domain.service.exceptions.BankAccountsNotFoundException;
+import com.shire42.api.bank.domain.service.exceptions.ClientNotFountException;
+import com.shire42.api.bank.domain.service.exceptions.InsuficientFoundsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BankAccountsNotFoundException.class)
     public ResponseEntity<Map<String, List<String>>> handleAccountFounds(BankAccountsNotFoundException ex) throws Exception {
+        final List<String> errors = List.of(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ClientNotFountException.class)
+    public ResponseEntity<Map<String, List<String>>> handleClientNotFound(ClientNotFountException ex) throws Exception {
         final List<String> errors = List.of(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }

@@ -33,6 +33,21 @@ docker container run -d --name availability.api \
 
 sleep 2
 
+docker container run -d --name client.api \
+        --network=bank-network \
+        -e SPRING_DATASOURCE_USERNAME=postgres \
+        -e SPRING_DATASOURCE_PASSWORD=postgres \
+        -e SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/client \
+        -e KEY_STORE_FILE_VALUE=api-keystore.p12 \
+        -e KEY_STORE_PASSWORD_VALUE=superuser \
+        -e KEY_STORE_TYPE=PKCS12 \
+        -e REDIS_HOST=redis \
+        -e REDIS_PORT=6379 \
+        -e CACHE_TYPE=redis \
+        -p 8484:8080 nelsonsozinho/client.api:latest
+
+sleep 2
+
 docker container run -d --name loan.api \
         --network=bank-network \
         -e SPRING_DATASOURCE_USERNAME=postgres \

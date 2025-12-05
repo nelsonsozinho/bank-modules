@@ -21,11 +21,10 @@ public class Account {
     @Column(name = "account_number")
     private String number;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
-    private Client client;
-
     @Column(name = "balance", nullable = false, columnDefinition = "numeric(19,2) default 0")
     private Double balance;
+
+    @Column(name = "client_id", nullable = false)
+    private Long clientId;
 
 }

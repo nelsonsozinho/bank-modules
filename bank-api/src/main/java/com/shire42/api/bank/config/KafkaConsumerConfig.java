@@ -1,6 +1,6 @@
 package com.shire42.api.bank.config;
 
-import com.shire42.api.bank.service.consumer.dto.LoanContractDTO;
+import com.shire42.api.bank.domain.service.consumer.dto.LoanContractDTO;
 import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;

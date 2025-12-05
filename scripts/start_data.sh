@@ -5,8 +5,7 @@ export PGPASSWORD=postgres
 psql -h localhost -p 5432 -U postgres -d availability -c "insert into client (id, name, cpf, email) values (1, 'Francis Drake', '77777777777', 'fc@gmail.com');"
 psql -h localhost -p 5432 -U postgres -d availability -c "insert into financial_restriction(value, source, last_update, is_activated, client_id) values (40000, 'Casas Bahia', now(), false, 1)"
 
-psql -h localhost -p 5432 -U postgres -d bank -c "insert into client (id, name, cpf, email) values (1, 'Francis Drake', '77777777777', 'fc@gmail.com');"
-psql -h localhost -p 5432 -U postgres -d bank -c "insert into client (id, name, cpf, email) values (2, 'Ronald Reagan', '88888888888', 'rc@gmail.com');"
+
 psql -h localhost -p 5432 -U postgres -d bank -c "insert into account(account_number, balance, client_id) values('123777', 5000, 1);"
 psql -h localhost -p 5432 -U postgres -d bank -c "insert into account(account_number, balance, client_id) values('123888', 52000, 2);"
 

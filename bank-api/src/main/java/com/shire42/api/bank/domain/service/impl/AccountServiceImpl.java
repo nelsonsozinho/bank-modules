@@ -1,14 +1,17 @@
-package com.shire42.api.bank.service.impl;
+package com.shire42.api.bank.domain.service.impl;
 
+import com.shire42.api.bank.client.BankClient;
+import com.shire42.api.bank.client.dto.Client;
 import com.shire42.api.bank.domain.model.Account;
 import com.shire42.api.bank.domain.model.Transaction;
 import com.shire42.api.bank.domain.model.rest.out.AccountOutRest;
 import com.shire42.api.bank.domain.repository.AccountRepository;
 import com.shire42.api.bank.domain.repository.TransactionRepository;
-import com.shire42.api.bank.service.AccountService;
-import com.shire42.api.bank.service.exceptions.BankAccountsNotFoundException;
-import com.shire42.api.bank.service.exceptions.InsuficientFoundsException;
-import com.shire42.api.bank.service.transaction.TransactionType;
+import com.shire42.api.bank.domain.service.AccountService;
+import com.shire42.api.bank.domain.service.exceptions.BankAccountsNotFoundException;
+import com.shire42.api.bank.domain.service.exceptions.ClientNotFountException;
+import com.shire42.api.bank.domain.service.exceptions.InsuficientFoundsException;
+import com.shire42.api.bank.domain.service.transaction.TransactionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,8 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository repository;
 
     private final TransactionRepository transactionRepository;
+
+    private final BankClient bankClient;
 
     @Override
     @Cacheable(value = "accountCache", key = "#accountNumber")
@@ -47,6 +52,9 @@ public class AccountServiceImpl implements AccountService {
         validateBankAccount(targetAccount, targetAccountNumber);
         validateTransaction(sourceAccount, value);
 
+        validateClient(sourceAccount);
+        validateClient(targetAccount);
+
         var sourceBalance = new BigDecimal(sourceAccount.getBalance());
         var targetBalance = new BigDecimal(targetAccount.getBalance());
 
@@ -56,7 +64,7 @@ public class AccountServiceImpl implements AccountService {
         sourceAccount.setBalance(sourceBalance.doubleValue());
         targetAccount.setBalance(targetBalance.doubleValue());
 
-        registerTransferTransaction(sourceAccount, targetAccount, sourceAccount.getClient().getId(), value);
+        registerTransferTransaction(sourceAccount, targetAccount, sourceAccount.getClientId(), value);
         repository.save(sourceAccount);
         repository.save(targetAccount);
     }
@@ -136,6 +144,13 @@ public class AccountServiceImpl implements AccountService {
     private void validateTransaction(final Account sourceAccount, BigDecimal value) {
         if(new BigDecimal(sourceAccount.getBalance()).subtract(value).longValue() < 0) {
             throw new InsuficientFoundsException( String.format("Account %s has no enought founds to complete the transaction", sourceAccount.getNumber()));
+        }
+    }
+
+    private void validateClient(final Account account) {
+        Client client = bankClient.getClientById(account.getClientId());
+        if(Objects.isNull(client)) {
+            throw new ClientNotFountException(String.format("Client %d was not found!", account.getClientId()));
         }
     }
 

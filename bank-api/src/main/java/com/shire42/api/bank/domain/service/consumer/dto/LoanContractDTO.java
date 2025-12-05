@@ -1,4 +1,4 @@
-package com.shire42.api.bank.service.consumer.dto;
+package com.shire42.api.bank.domain.service.consumer.dto;
 
 import lombok.Data;
 

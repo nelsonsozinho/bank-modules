@@ -1,11 +1,12 @@
 package com.shire42.api.bank.service;
 
+import com.shire42.api.bank.client.BankClient;
+import com.shire42.api.bank.client.dto.Client;
 import com.shire42.api.bank.domain.model.Account;
-import com.shire42.api.bank.domain.model.Client;
 import com.shire42.api.bank.domain.repository.AccountRepository;
 import com.shire42.api.bank.domain.repository.TransactionRepository;
-import com.shire42.api.bank.service.impl.AccountServiceImpl;
-import com.shire42.api.bank.service.transaction.TransactionType;
+import com.shire42.api.bank.domain.service.impl.AccountServiceImpl;
+import com.shire42.api.bank.domain.service.transaction.TransactionType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,9 +14,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -27,6 +28,10 @@ public class AccountServiceTest {
 
     @Mock
     private TransactionRepository transactionRepository;
+
+    @Mock
+    private BankClient bankClient;
+
 
     @InjectMocks
     private AccountServiceImpl accountService;
@@ -64,12 +69,16 @@ public class AccountServiceTest {
         String sourceAccountNumber = "123";
         String targetAccountNumber = "321";
         BigDecimal value = new BigDecimal("100.00");
+        Client client1 = Client.builder().build();
+        Client client2 = Client.builder().build();
 
         Account sourceAccount = accountAnswer();
         Account targetAccount = accountAnswer();
 
         when(accountRepository.findByNumber(sourceAccountNumber)).thenReturn(sourceAccount);
         when(accountRepository.findByNumber(targetAccountNumber)).thenReturn(targetAccount);
+        when(bankClient.getClientById(any())).thenReturn(client1);
+        when(bankClient.getClientById(any())).thenReturn(client2);
 
         accountService.makeTransaction(sourceAccountNumber, targetAccountNumber, value);
 
@@ -81,32 +90,6 @@ public class AccountServiceTest {
         account.setBalance(Double.parseDouble("400.90"));
         account.setId(1L);
         account.setNumber("123");
-
-        Client client = new Client();
-        client.setEmail("newaccount@bank.com");
-        client.setId(1L);
-        client.setName("Simple Name");
-        client.setAccounts(List.of(account));
-
-        account.setClient(client);
-
-        return account;
-    }
-
-    private Account targetAccountAnswer() {
-        Account account = new Account();
-        account.setBalance(Double.parseDouble("500.90"));
-        account.setId(2L);
-        account.setNumber("123");
-
-        Client client = new Client();
-        client.setEmail("accaccount@bank.com");
-        client.setId(2L);
-        client.setName("target Name");
-        client.setAccounts(List.of(account));
-
-        account.setClient(client);
-
         return account;
     }
 

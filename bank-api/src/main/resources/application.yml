@@ -40,3 +40,8 @@ spring:
 topic:
   name:
     consumer: loan-contract-accept
+api:
+  bank:
+    client:
+      url: ${CLIENT_API:https://localhost:8080/client}
+      name: client

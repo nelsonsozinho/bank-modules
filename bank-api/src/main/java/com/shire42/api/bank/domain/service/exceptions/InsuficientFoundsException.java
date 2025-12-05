@@ -1,4 +1,4 @@
-package com.shire42.api.bank.service.exceptions;
+package com.shire42.api.bank.domain.service.exceptions;
 
 public class InsuficientFoundsException extends RuntimeException {
 

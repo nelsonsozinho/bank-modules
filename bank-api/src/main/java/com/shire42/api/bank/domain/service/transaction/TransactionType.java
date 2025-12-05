@@ -1,4 +1,4 @@
-package com.shire42.api.bank.service.transaction;
+package com.shire42.api.bank.domain.service.transaction;
 
 public enum TransactionType {
 
