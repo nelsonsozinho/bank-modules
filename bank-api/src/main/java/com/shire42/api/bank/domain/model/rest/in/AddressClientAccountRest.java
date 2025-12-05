@@ -1,14 +1,13 @@
-package com.shire42.api.bank.client.dto;
+package com.shire42.api.bank.domain.model.rest.in;
 
 import lombok.Builder;
 
 @Builder
-public record Address(
-        Long idAddress,
+public record AddressClientAccountRest(
         String street,
-        String number,
         String zipCode,
         String neighborhood,
+        String number,
         String city,
         String state,
         String country,

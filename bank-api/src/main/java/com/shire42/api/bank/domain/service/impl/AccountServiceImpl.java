@@ -1,10 +1,13 @@
 package com.shire42.api.bank.domain.service.impl;
 
 import com.shire42.api.bank.client.BankClient;
+import com.shire42.api.bank.client.dto.Address;
 import com.shire42.api.bank.client.dto.Client;
 import com.shire42.api.bank.domain.model.Account;
 import com.shire42.api.bank.domain.model.Transaction;
+import com.shire42.api.bank.domain.model.rest.in.ClientAccountRest;
 import com.shire42.api.bank.domain.model.rest.out.AccountOutRest;
+import com.shire42.api.bank.domain.model.rest.out.ClientAccountOutRest;
 import com.shire42.api.bank.domain.repository.AccountRepository;
 import com.shire42.api.bank.domain.repository.TransactionRepository;
 import com.shire42.api.bank.domain.service.AccountService;
@@ -67,6 +70,28 @@ public class AccountServiceImpl implements AccountService {
         registerTransferTransaction(sourceAccount, targetAccount, sourceAccount.getClientId(), value);
         repository.save(sourceAccount);
         repository.save(targetAccount);
+    }
+
+    @Override
+    public ClientAccountOutRest createBankAccount(ClientAccountRest clientAccountRest) {
+        Client client = Client.builder()
+                .name(clientAccountRest.name())
+                .email(clientAccountRest.email())
+                .cpf(clientAccountRest.cpf())
+                .rg(clientAccountRest.rg())
+                .build();
+
+        Address address = Address.builder()
+                .street(clientAccountRest.address().street())
+                .number(clientAccountRest.address().number())
+                .city(clientAccountRest.address().city())
+                .state(clientAccountRest.address().state())
+                .zipCode(clientAccountRest.address().zipCode())
+                .build();
+
+        Client newClient = bankClient.saveNewClient(client);
+
+        return null;
     }
 
     @Transactional

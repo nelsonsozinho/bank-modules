@@ -1,9 +1,11 @@
 package com.shire42.api.bank.controllers;
 
 import com.shire42.api.bank.domain.model.rest.in.AccountTransactionInRest;
+import com.shire42.api.bank.domain.model.rest.in.ClientAccountRest;
 import com.shire42.api.bank.domain.model.rest.in.DepositTransactionRest;
 import com.shire42.api.bank.domain.model.rest.out.AccountOutRest;
 import com.shire42.api.bank.domain.model.rest.out.AccountTransactionOutRest;
+import com.shire42.api.bank.domain.model.rest.out.ClientAccountOutRest;
 import com.shire42.api.bank.domain.service.AccountService;
 import com.shire42.api.bank.domain.service.transaction.TransactionType;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,12 @@ public class AccountController {
                 .message("Transaction completed")
                 .build();
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/new")
+    public ResponseEntity<ClientAccountOutRest> createNewAccount(@RequestBody final ClientAccountRest clientAccount) {
+        //TODO implements it later
+        return null;
     }
 
     @PostMapping("/deposit")

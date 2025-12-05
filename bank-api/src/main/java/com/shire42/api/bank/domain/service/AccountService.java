@@ -1,6 +1,8 @@
 package com.shire42.api.bank.domain.service;
 
+import com.shire42.api.bank.domain.model.rest.in.ClientAccountRest;
 import com.shire42.api.bank.domain.model.rest.out.AccountOutRest;
+import com.shire42.api.bank.domain.model.rest.out.ClientAccountOutRest;
 import com.shire42.api.bank.domain.service.transaction.TransactionType;
 
 import java.math.BigDecimal;
@@ -14,5 +16,7 @@ public interface AccountService {
     void makeWithdrawal(final String clientId, final String accountNumber, final BigDecimal amount);
 
     void makeTransaction(final String sourceAccountNumber, final String targetAccountNumber, final BigDecimal value);
+
+    ClientAccountOutRest createBankAccount(final ClientAccountRest clientAccountRest);
 
 }
