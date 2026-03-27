@@ -5,9 +5,11 @@ import com.shire42.api.bank.domain.port.in.AccountSearchUseCase;
 import com.shire42.api.bank.domain.port.in.AccountWithdrawalUseCase;
 import com.shire42.api.bank.domain.port.out.AccountDepositRepository;
 import com.shire42.api.bank.domain.port.out.AccountSearchRepository;
+import com.shire42.api.bank.domain.port.out.AccountTransferRepository;
 import com.shire42.api.bank.domain.port.out.AccountWithdrawalRepository;
 import com.shire42.api.bank.domain.service.AccountDepositService;
 import com.shire42.api.bank.domain.service.AccountSearchService;
+import com.shire42.api.bank.domain.service.AccountTransferService;
 import com.shire42.api.bank.domain.service.AccountWithdrawalService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +32,11 @@ public class AccountConfig {
     @Bean
     public AccountWithdrawalUseCase accountWithdrawalUseCase(final AccountWithdrawalRepository accountWithdrawalRepository, final AccountSearchRepository accountSearchRepository) {
         return new AccountWithdrawalService(accountWithdrawalRepository, accountSearchRepository);
+    }
+
+    @Bean
+    public AccountTransferService accountTransactionUseCase(final AccountSearchRepository accountSearchRepository, final AccountTransferRepository accountTransferRepository) {
+        return new AccountTransferService(accountTransferRepository, accountSearchRepository);
     }
 
 }

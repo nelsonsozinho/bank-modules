@@ -4,16 +4,14 @@ import com.shire42.api.bank.adapter.out.persistence.model.AccountEntity;
 import com.shire42.api.bank.adapter.out.persistence.repository.AccountRepository;
 import com.shire42.api.bank.domain.model.Account;
 import com.shire42.api.bank.domain.port.out.AccountSearchRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AccountSearchAdapter implements AccountSearchRepository {
 
-     private AccountRepository accountRepository;
-
-     public AccountSearchAdapter(final AccountRepository accountRepository) {
-          this.accountRepository = accountRepository;
-     }
+     private final AccountRepository accountRepository;
 
      @Override
      public Account findAccountByNumber(String number) {
