@@ -1,14 +1,14 @@
 package com.shire42.api.bank.service.impl;
 
-import com.shire42.api.bank.domain.model.Account;
-import com.shire42.api.bank.domain.model.Transaction;
-import com.shire42.api.bank.domain.model.rest.out.AccountOutRest;
-import com.shire42.api.bank.domain.repository.AccountRepository;
-import com.shire42.api.bank.domain.repository.TransactionRepository;
+import com.shire42.api.bank.adapter.out.persistence.model.AccountEntity;
+import com.shire42.api.bank.adapter.out.persistence.model.TransactionEntity;
+import com.shire42.api.bank.adapter.out.dto.AccountOutRest;
+import com.shire42.api.bank.adapter.out.persistence.repository.AccountRepository;
+import com.shire42.api.bank.adapter.out.persistence.repository.TransactionRepository;
 import com.shire42.api.bank.service.AccountService;
-import com.shire42.api.bank.service.exceptions.BankAccountsNotFoundException;
-import com.shire42.api.bank.service.exceptions.InsuficientFoundsException;
-import com.shire42.api.bank.service.transaction.TransactionType;
+import com.shire42.api.bank.domain.exceptions.BankAccountsNotFoundException;
+import com.shire42.api.bank.domain.exceptions.InsuficientFoundsException;
+import com.shire42.api.bank.adapter.out.persistence.model.TransactionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Cacheable(value = "accountCache", key = "#accountNumber")
     public AccountOutRest getAccountByAccountNumber(final String accountNumber) {
-        Account account = repository.findByNumber(accountNumber);
+        AccountEntity account = repository.findByNumber(accountNumber);
         return  AccountOutRest.builder()
                 .accountId(account.getId())
                 .balance(BigDecimal.valueOf(account.getBalance()))
@@ -40,8 +40,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void makeTransaction(final String sourceAccountNumber, final String targetAccountNumber, final BigDecimal value) {
-        Account sourceAccount = repository.findByNumber(sourceAccountNumber);
-        Account targetAccount = repository.findByNumber(targetAccountNumber);
+        AccountEntity sourceAccount = repository.findByNumber(sourceAccountNumber);
+        AccountEntity targetAccount = repository.findByNumber(targetAccountNumber);
 
         validateBankAccount(sourceAccount, sourceAccountNumber);
         validateBankAccount(targetAccount, targetAccountNumber);
@@ -63,7 +63,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional
     public void makeDeposit(final String clientId, final String accountNumber, final BigDecimal amount, TransactionType type) {
-        final Account account = repository.findByNumber(accountNumber);
+        final AccountEntity account = repository.findByNumber(accountNumber);
         validateBankAccount(account, accountNumber);
 
         final BigDecimal accountAmount = new BigDecimal(account.getBalance()).add(amount);
@@ -75,7 +75,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional
     public void makeWithdrawal(final String clientId, final String accountNumber, final BigDecimal amount) {
-        final Account account = repository.findByNumber(accountNumber);
+        final AccountEntity account = repository.findByNumber(accountNumber);
         validateBankAccount(account, accountNumber);
 
         final BigDecimal accountAmount = new BigDecimal(account.getBalance()).subtract(amount);
@@ -87,11 +87,11 @@ public class AccountServiceImpl implements AccountService {
         repository.save(account);
     }
 
-    private void registerTransferTransaction(final Account sourceAccount,
-                                             final Account targetAccount,
+    private void registerTransferTransaction(final AccountEntity sourceAccount,
+                                             final AccountEntity targetAccount,
                                              Long clientId,
                                              BigDecimal amount) {
-        Transaction transaction = new Transaction();
+        TransactionEntity transaction = new TransactionEntity();
         transaction.setAmount(amount.doubleValue());
         transaction.setTransactionType(TransactionType.TRANSFER.name());
         transaction.setClientId(clientId);
@@ -101,10 +101,10 @@ public class AccountServiceImpl implements AccountService {
         transactionRepository.save(transaction);
     }
 
-    private void registerWithdrawalTransaction(final Account sourceAccount,
+    private void registerWithdrawalTransaction(final AccountEntity sourceAccount,
                                              Long clientId,
                                              BigDecimal amount) {
-        Transaction transaction = new Transaction();
+        TransactionEntity transaction = new TransactionEntity();
         transaction.setAmount(amount.doubleValue());
         transaction.setTransactionType(TransactionType.WITHDRAWAL.name());
         transaction.setClientId(clientId);
@@ -113,11 +113,11 @@ public class AccountServiceImpl implements AccountService {
         transactionRepository.save(transaction);
     }
 
-    private void registerDepositTransaction(final Account sourceAccount,
+    private void registerDepositTransaction(final AccountEntity sourceAccount,
                                             final Long clientId,
                                             final BigDecimal amount,
                                             final TransactionType type) {
-        Transaction transaction = new Transaction();
+        TransactionEntity transaction = new TransactionEntity();
         transaction.setAmount(amount.doubleValue());
         transaction.setTransactionType(type.name());
         transaction.setClientId(clientId);
@@ -127,13 +127,13 @@ public class AccountServiceImpl implements AccountService {
         transactionRepository.save(transaction);
     }
 
-    private void validateBankAccount(final Account account, final String bankAccountNumber) {
+    private void validateBankAccount(final AccountEntity account, final String bankAccountNumber) {
         if(Objects.isNull(account)) {
             throw new BankAccountsNotFoundException(String.format("Account %s was not found!", bankAccountNumber));
         }
     }
 
-    private void validateTransaction(final Account sourceAccount, BigDecimal value) {
+    private void validateTransaction(final AccountEntity sourceAccount, BigDecimal value) {
         if(new BigDecimal(sourceAccount.getBalance()).subtract(value).longValue() < 0) {
             throw new InsuficientFoundsException( String.format("Account %s has no enought founds to complete the transaction", sourceAccount.getNumber()));
         }

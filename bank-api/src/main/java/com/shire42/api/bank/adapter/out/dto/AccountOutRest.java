@@ -1,4 +1,4 @@
-package com.shire42.api.bank.domain.model.rest.out;
+package com.shire42.api.bank.adapter.out.dto;
 
 import lombok.Builder;
 import lombok.Data;

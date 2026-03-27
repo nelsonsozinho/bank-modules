@@ -1,7 +1,7 @@
-package com.shire42.api.bank.controllers.handler;
+package com.shire42.api.bank.adapter.in.web.controllers.handler;
 
-import com.shire42.api.bank.service.exceptions.BankAccountsNotFoundException;
-import com.shire42.api.bank.service.exceptions.InsuficientFoundsException;
+import com.shire42.api.bank.domain.exceptions.BankAccountsNotFoundException;
+import com.shire42.api.bank.domain.exceptions.InsuficientFoundsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,11 +1,11 @@
 package com.shire42.api.bank.service;
 
-import com.shire42.api.bank.domain.model.Account;
-import com.shire42.api.bank.domain.model.Client;
-import com.shire42.api.bank.domain.repository.AccountRepository;
-import com.shire42.api.bank.domain.repository.TransactionRepository;
+import com.shire42.api.bank.adapter.out.persistence.model.AccountEntity;
+import com.shire42.api.bank.adapter.out.persistence.model.ClientEntity;
+import com.shire42.api.bank.adapter.out.persistence.repository.AccountRepository;
+import com.shire42.api.bank.adapter.out.persistence.repository.TransactionRepository;
 import com.shire42.api.bank.service.impl.AccountServiceImpl;
-import com.shire42.api.bank.service.transaction.TransactionType;
+import com.shire42.api.bank.adapter.out.persistence.model.TransactionType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -65,8 +65,8 @@ public class AccountServiceTest {
         String targetAccountNumber = "321";
         BigDecimal value = new BigDecimal("100.00");
 
-        Account sourceAccount = accountAnswer();
-        Account targetAccount = accountAnswer();
+        AccountEntity sourceAccount = accountAnswer();
+        AccountEntity targetAccount = accountAnswer();
 
         when(accountRepository.findByNumber(sourceAccountNumber)).thenReturn(sourceAccount);
         when(accountRepository.findByNumber(targetAccountNumber)).thenReturn(targetAccount);
@@ -76,13 +76,13 @@ public class AccountServiceTest {
         verify(transactionRepository).save(any());
     }
 
-    private Account accountAnswer() {
-        Account account = new Account();
+    private AccountEntity accountAnswer() {
+        AccountEntity account = new AccountEntity();
         account.setBalance(Double.parseDouble("400.90"));
         account.setId(1L);
         account.setNumber("123");
 
-        Client client = new Client();
+        ClientEntity client = new ClientEntity();
         client.setEmail("newaccount@bank.com");
         client.setId(1L);
         client.setName("Simple Name");
@@ -93,13 +93,13 @@ public class AccountServiceTest {
         return account;
     }
 
-    private Account targetAccountAnswer() {
-        Account account = new Account();
+    private AccountEntity targetAccountAnswer() {
+        AccountEntity account = new AccountEntity();
         account.setBalance(Double.parseDouble("500.90"));
         account.setId(2L);
         account.setNumber("123");
 
-        Client client = new Client();
+        ClientEntity client = new ClientEntity();
         client.setEmail("accaccount@bank.com");
         client.setId(2L);
         client.setName("target Name");

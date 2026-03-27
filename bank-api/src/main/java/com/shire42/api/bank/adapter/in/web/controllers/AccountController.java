@@ -1,11 +1,13 @@
-package com.shire42.api.bank.controllers;
+package com.shire42.api.bank.adapter.in.web.controllers;
 
-import com.shire42.api.bank.domain.model.rest.in.AccountTransactionInRest;
-import com.shire42.api.bank.domain.model.rest.in.DepositTransactionRest;
-import com.shire42.api.bank.domain.model.rest.out.AccountOutRest;
-import com.shire42.api.bank.domain.model.rest.out.AccountTransactionOutRest;
+import com.shire42.api.bank.adapter.in.AccountTransactionInRest;
+import com.shire42.api.bank.adapter.in.DepositTransactionRest;
+import com.shire42.api.bank.adapter.out.dto.AccountOutRest;
+import com.shire42.api.bank.adapter.out.dto.AccountTransactionOutRest;
+import com.shire42.api.bank.domain.port.in.AccountDepositUseCase;
+import com.shire42.api.bank.domain.port.in.AccountWithdrawalUseCase;
 import com.shire42.api.bank.service.AccountService;
-import com.shire42.api.bank.service.transaction.TransactionType;
+import com.shire42.api.bank.adapter.out.persistence.model.TransactionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
 
     private final AccountService accountService;
+
+    private final AccountDepositUseCase useCase;
+
+    private final AccountWithdrawalUseCase withdrawalUseCase;
 
     @GetMapping("/{accountNumber}")
     public ResponseEntity<AccountOutRest> getAccountByNumber(@PathVariable("accountNumber") final String accountNumber) {
@@ -40,7 +46,7 @@ public class AccountController {
 
     @PostMapping("/deposit")
     public ResponseEntity<AccountTransactionOutRest> deposit(@RequestBody final DepositTransactionRest deposit) {
-        accountService.makeDeposit(deposit.getClientId(), deposit.getAccountNumber(), deposit.getAmount(), TransactionType.DEPOSIT);
+        useCase.makeDeposit(deposit.getClientId(), deposit.getAccountNumber(), deposit.getAmount(), TransactionType.DEPOSIT);
         var response = AccountTransactionOutRest.builder()
                 .status("SUCCESS")
                 .message("Deposit completed")
@@ -50,7 +56,7 @@ public class AccountController {
 
     @PostMapping("/withdrawal")
     public ResponseEntity<AccountTransactionOutRest> withdrawal(@RequestBody final DepositTransactionRest deposit) {
-        accountService.makeWithdrawal(deposit.getClientId(), deposit.getAccountNumber(), deposit.getAmount());
+        withdrawalUseCase.makeWithdrawal(deposit.getClientId(), deposit.getAccountNumber(), deposit.getAmount());
         var response = AccountTransactionOutRest.builder()
                 .status("SUCCESS")
                 .message("Withdrawal completed")

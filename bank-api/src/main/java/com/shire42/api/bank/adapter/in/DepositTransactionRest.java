@@ -1,4 +1,4 @@
-package com.shire42.api.bank.domain.model.rest.in;
+package com.shire42.api.bank.adapter.in;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.shire42.api.bank.service;
 
-import com.shire42.api.bank.domain.model.rest.out.AccountOutRest;
-import com.shire42.api.bank.service.transaction.TransactionType;
+import com.shire42.api.bank.adapter.out.dto.AccountOutRest;
+import com.shire42.api.bank.adapter.out.persistence.model.TransactionType;
 
 import java.math.BigDecimal;
 
