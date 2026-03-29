@@ -5,6 +5,7 @@ import com.shire42.api.bank.adapter.in.DepositTransactionRest;
 import com.shire42.api.bank.adapter.out.dto.AccountOutRest;
 import com.shire42.api.bank.adapter.out.dto.AccountTransactionOutRest;
 import com.shire42.api.bank.domain.port.in.AccountDepositUseCase;
+import com.shire42.api.bank.domain.port.in.AccountTransferUseCase;
 import com.shire42.api.bank.domain.port.in.AccountWithdrawalUseCase;
 import com.shire42.api.bank.service.AccountService;
 import com.shire42.api.bank.adapter.out.persistence.model.TransactionType;
@@ -29,6 +30,8 @@ public class AccountController {
 
     private final AccountWithdrawalUseCase withdrawalUseCase;
 
+    private final AccountTransferUseCase accountTransferUseCase;
+
     @GetMapping("/{accountNumber}")
     public ResponseEntity<AccountOutRest> getAccountByNumber(@PathVariable("accountNumber") final String accountNumber) {
         return ResponseEntity.ok(accountService.getAccountByAccountNumber(accountNumber));
@@ -36,7 +39,7 @@ public class AccountController {
 
     @PostMapping("/transfer")
     public ResponseEntity<AccountTransactionOutRest> transferTransaction(@RequestBody final AccountTransactionInRest transferObject) {
-        accountService.makeTransaction(transferObject.getSourceAccount(), transferObject.getTargetAccount(), transferObject.getAmount());
+        accountTransferUseCase.transfer(transferObject.getSourceAccount(), transferObject.getTargetAccount(), transferObject.getAmount());
         var response = AccountTransactionOutRest.builder()
                 .status("SUCCESS")
                 .message("Transaction completed")

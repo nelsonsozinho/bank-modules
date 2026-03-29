@@ -29,7 +29,7 @@ public class AccountTransferAdapter implements AccountTransferRepository {
         AccountEntity entityTargetAccount = accountRepository.findByNumber(targetAccount.getNumber());
 
         entitySourceAccount.setBalance(sourceAccount.getBalance());
-        entityTargetAccount.setBalance(sourceAccount.getBalance());
+        entityTargetAccount.setBalance(targetAccount.getBalance());
 
         registerTransferTransaction(entitySourceAccount, entityTargetAccount, sourceAccount.getClient().getId(), amount);
         accountRepository.save(entitySourceAccount);
