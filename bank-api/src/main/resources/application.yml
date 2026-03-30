@@ -25,10 +25,13 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: validate
-  kafka:
+  Kafka:
     bootstrap-servers: ${BOOTSTRAP_SERVER}:${BOOTSTRAP_PORT}
     consumer:
       group-id: contract-loans
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      max-poll-records: 1
   data:
     redis:
       host: ${REDIS_HOST:redis}
