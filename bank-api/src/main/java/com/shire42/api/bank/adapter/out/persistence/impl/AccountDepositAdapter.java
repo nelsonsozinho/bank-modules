@@ -6,7 +6,6 @@ import com.shire42.api.bank.adapter.out.persistence.model.TransactionType;
 import com.shire42.api.bank.adapter.out.persistence.repository.AccountRepository;
 import com.shire42.api.bank.adapter.out.persistence.repository.TransactionRepository;
 import com.shire42.api.bank.domain.model.Account;
-import com.shire42.api.bank.domain.model.Transaction;
 import com.shire42.api.bank.domain.port.out.AccountDepositRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ public class AccountDepositAdapter implements AccountDepositRepository {
 
     @Override
     @Transactional
-    public void makeDeposit(Account account, BigDecimal amount, TransactionType type, Transaction transaction) {
+    public void makeDeposit(Account account, BigDecimal amount, TransactionType type) {
         registerDepositTransaction(account.getNumber(), account.getId(), amount , type);
         accountRepository.save(convertToAccountEntity(account));
     }

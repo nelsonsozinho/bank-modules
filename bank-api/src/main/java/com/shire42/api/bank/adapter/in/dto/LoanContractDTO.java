@@ -1,4 +1,4 @@
-package com.shire42.api.bank.service.consumer.dto;
+package com.shire42.api.bank.adapter.in.dto;
 
 import lombok.Data;
 

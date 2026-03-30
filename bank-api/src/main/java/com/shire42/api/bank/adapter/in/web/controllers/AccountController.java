@@ -4,10 +4,11 @@ import com.shire42.api.bank.adapter.in.AccountTransactionInRest;
 import com.shire42.api.bank.adapter.in.DepositTransactionRest;
 import com.shire42.api.bank.adapter.out.dto.AccountOutRest;
 import com.shire42.api.bank.adapter.out.dto.AccountTransactionOutRest;
+import com.shire42.api.bank.domain.model.Account;
 import com.shire42.api.bank.domain.port.in.AccountDepositUseCase;
+import com.shire42.api.bank.domain.port.in.AccountSearchUseCase;
 import com.shire42.api.bank.domain.port.in.AccountTransferUseCase;
 import com.shire42.api.bank.domain.port.in.AccountWithdrawalUseCase;
-import com.shire42.api.bank.service.AccountService;
 import com.shire42.api.bank.adapter.out.persistence.model.TransactionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -19,12 +20,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping(value = "/account", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class AccountController {
-
-    private final AccountService accountService;
 
     private final AccountDepositUseCase useCase;
 
@@ -32,9 +33,15 @@ public class AccountController {
 
     private final AccountTransferUseCase accountTransferUseCase;
 
+    private final AccountSearchUseCase accountSearchUseCase;
+
     @GetMapping("/{accountNumber}")
     public ResponseEntity<AccountOutRest> getAccountByNumber(@PathVariable("accountNumber") final String accountNumber) {
-        return ResponseEntity.ok(accountService.getAccountByAccountNumber(accountNumber));
+        Account account = accountSearchUseCase.findAccountByNumber(accountNumber);
+        return ResponseEntity.ok( AccountOutRest.builder()
+                .number(account.getNumber())
+                .balance(new BigDecimal(account.getBalance()))
+                .build());
     }
 
     @PostMapping("/transfer")

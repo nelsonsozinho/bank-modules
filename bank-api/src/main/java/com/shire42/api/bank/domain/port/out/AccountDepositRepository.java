@@ -8,6 +8,6 @@ import java.math.BigDecimal;
 
 public interface AccountDepositRepository {
 
-    void makeDeposit(Account account, BigDecimal amount, TransactionType type, Transaction transaction);
+    void makeDeposit(Account account, BigDecimal amount, TransactionType type);
 
 }
