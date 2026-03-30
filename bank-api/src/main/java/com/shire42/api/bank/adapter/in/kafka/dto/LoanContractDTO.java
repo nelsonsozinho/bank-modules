@@ -1,4 +1,4 @@
-package com.shire42.api.bank.adapter.in.dto;
+package com.shire42.api.bank.adapter.in.kafka.dto;
 
 import lombok.Data;
 

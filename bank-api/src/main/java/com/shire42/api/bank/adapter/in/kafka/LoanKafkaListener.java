@@ -2,7 +2,7 @@ package com.shire42.api.bank.adapter.in.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shire42.api.bank.adapter.in.dto.LoanContractDTO;
+import com.shire42.api.bank.adapter.in.kafka.dto.LoanContractDTO;
 import com.shire42.api.bank.domain.model.LoanContractEvent;
 import com.shire42.api.bank.domain.port.in.LoanContractConsumerUseCase;
 import lombok.RequiredArgsConstructor;
