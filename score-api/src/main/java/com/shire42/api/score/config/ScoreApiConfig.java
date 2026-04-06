@@ -4,6 +4,7 @@ import com.shire42.api.score.domain.port.out.FindClientRepository;
 import com.shire42.api.score.domain.port.out.FindScoreRepository;
 import com.shire42.api.score.domain.port.out.NewScoreRepository;
 import com.shire42.api.score.domain.port.out.UpdateScoreRepository;
+import com.shire42.api.score.domain.servuce.FindClientService;
 import com.shire42.api.score.domain.servuce.FindScoreService;
 import com.shire42.api.score.domain.servuce.NewScoreService;
 import com.shire42.api.score.domain.servuce.UpdateScoreService;
@@ -30,6 +31,11 @@ public class ScoreApiConfig {
             final FindClientRepository findClientRepository,
             final NewScoreRepository newScoreRepository) {
         return new NewScoreService(findClientRepository, newScoreRepository);
+    }
+
+    @Bean
+    public FindClientService findClientService(final FindClientRepository findClientRepository) {
+        return new FindClientService(findClientRepository);
     }
 
 }

@@ -4,7 +4,7 @@ import com.shire42.api.score.adapter.in.controllers.rest.in.ScoreRestInput;
 import com.shire42.api.score.adapter.in.controllers.rest.out.ScoreRestOut;
 import com.shire42.api.score.domain.port.in.FindScoreUseCase;
 import com.shire42.api.score.domain.port.in.NewScoreUseCase;
-import com.shire42.api.score.domain.servuce.UpdateScoreService;
+import com.shire42.api.score.domain.port.in.UpdateScoreUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class ScoreController {
 
     private final FindScoreUseCase findScoreUseCase;
 
-    private final UpdateScoreService updateScoreService;
+    private final UpdateScoreUseCase updateScoreUseCase;
 
     private final NewScoreUseCase newScoreUseCase;
 
@@ -45,7 +45,7 @@ public class ScoreController {
 
     @PutMapping
     public ResponseEntity<?> updateScore(@RequestBody final ScoreRestInput input) throws URISyntaxException {
-        String cpf = updateScoreService.updateScore(input.getCpf(), input.getScore());
+        String cpf = updateScoreUseCase.updateScore(input.getCpf(), input.getScore());
         return ResponseEntity.created(new URI("/score/client/" + cpf)).build();
     }
 

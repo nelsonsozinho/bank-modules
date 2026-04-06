@@ -23,7 +23,7 @@ public class FindScoreAdapter implements FindScoreRepository {
                 .lastUpdate(scoreEntity.getLastUpdate())
                 .client(Client.builder()
                         .cpf(scoreEntity.getClient().getCpf())
-                        .id(scoreEntity.getId())
+                        .id(scoreEntity.getClient().getId())
                         .email(scoreEntity.getClient().getEmail())
                         .name(scoreEntity.getClient().getName())
                         .cpf(scoreEntity.getClient().getCpf())
