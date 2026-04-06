@@ -1,4 +1,4 @@
-package com.shire42.api.score.controllers.handler;
+package com.shire42.api.score.adapter.in.controllers.handler;
 
 import com.shire42.api.score.service.exception.ClientScoreNotFoundException;
 import org.springframework.http.HttpHeaders;

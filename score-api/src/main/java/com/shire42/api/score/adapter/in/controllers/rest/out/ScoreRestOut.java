@@ -1,4 +1,4 @@
-package com.shire42.api.score.controllers.rest.out;
+package com.shire42.api.score.adapter.in.controllers.rest.out;
 
 import lombok.Builder;
 import lombok.Getter;

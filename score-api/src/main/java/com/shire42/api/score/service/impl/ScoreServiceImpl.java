@@ -1,10 +1,10 @@
 package com.shire42.api.score.service.impl;
 
-import com.shire42.api.score.controllers.rest.out.ScoreRestOut;
-import com.shire42.api.score.model.Client;
-import com.shire42.api.score.model.Score;
-import com.shire42.api.score.repository.ClientRepository;
-import com.shire42.api.score.repository.ScoreRepository;
+import com.shire42.api.score.adapter.in.controllers.rest.out.ScoreRestOut;
+import com.shire42.api.score.adapter.out.persistence.model.ClientEntity;
+import com.shire42.api.score.adapter.out.persistence.model.ScoreEntity;
+import com.shire42.api.score.adapter.out.persistence.repository.ClientRepository;
+import com.shire42.api.score.adapter.out.persistence.repository.ScoreRepository;
 import com.shire42.api.score.service.ScoreService;
 import com.shire42.api.score.service.exception.ClientNotFoundException;
 import com.shire42.api.score.service.exception.ClientScoreNotFoundException;
@@ -28,7 +28,7 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     @Cacheable(value = "scoreClientCache", key = "#cpf")
     public ScoreRestOut findScoreByClientCpf(final String cpf) {
-        Score score = repository.findByClientCpf(cpf)
+        ScoreEntity score = repository.findByClientCpf(cpf)
                 .orElseThrow(() -> new ClientScoreNotFoundException(String.format("Score from client %s not found", cpf)));
         return ScoreRestOut.builder()
                 .cpf(cpf)
@@ -40,16 +40,16 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     @Transactional
     public String updateScore(final String cpf, final BigDecimal newValue) {
-        final Optional<Score> score = repository.findByClientCpf(cpf);
+        final Optional<ScoreEntity> score = repository.findByClientCpf(cpf);
 
         if(score.isPresent()) {
-            Score s = score.get();
+            ScoreEntity s = score.get();
             s.setScore(newValue.doubleValue());
             s.setLastUpdate(LocalDate.now());
             repository.save(s);
         } else {
-            Score newScore = new Score();
-            Client client = clientRepository.findClientByCpf(cpf).orElseThrow(() ->
+            ScoreEntity newScore = new ScoreEntity();
+            ClientEntity client = clientRepository.findClientByCpf(cpf).orElseThrow(() ->
                     new ClientNotFoundException(String.format("Client with cpf %s not found", cpf)));
             newScore.setScore(newValue.doubleValue());
             newScore.setClient(client);

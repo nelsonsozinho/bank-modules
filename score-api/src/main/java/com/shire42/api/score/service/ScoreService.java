@@ -1,7 +1,6 @@
 package com.shire42.api.score.service;
 
-import com.shire42.api.score.controllers.rest.out.ScoreRestOut;
-import com.shire42.api.score.model.Score;
+import com.shire42.api.score.adapter.in.controllers.rest.out.ScoreRestOut;
 
 import java.math.BigDecimal;
 

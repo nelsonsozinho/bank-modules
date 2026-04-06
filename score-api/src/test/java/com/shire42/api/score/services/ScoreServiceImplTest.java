@@ -1,10 +1,10 @@
 package com.shire42.api.score.services;
 
-import com.shire42.api.score.controllers.rest.out.ScoreRestOut;
-import com.shire42.api.score.model.Client;
-import com.shire42.api.score.model.Score;
-import com.shire42.api.score.repository.ClientRepository;
-import com.shire42.api.score.repository.ScoreRepository;
+import com.shire42.api.score.adapter.in.controllers.rest.out.ScoreRestOut;
+import com.shire42.api.score.adapter.out.persistence.model.ClientEntity;
+import com.shire42.api.score.adapter.out.persistence.model.ScoreEntity;
+import com.shire42.api.score.adapter.out.persistence.repository.ClientRepository;
+import com.shire42.api.score.adapter.out.persistence.repository.ScoreRepository;
 import com.shire42.api.score.service.impl.ScoreServiceImpl;
 import com.shire42.api.score.service.exception.ClientNotFoundException;
 import com.shire42.api.score.service.exception.ClientScoreNotFoundException;
@@ -36,24 +36,24 @@ class ScoreServiceImplTest {
     private ScoreServiceImpl service;
 
     @Captor
-    private ArgumentCaptor<Score> scoreCaptor;
+    private ArgumentCaptor<ScoreEntity> scoreCaptor;
 
     @Test
     void updateScore_updatesExistingScore() {
         String cpf = "11122233344";
         BigDecimal newVal = BigDecimal.valueOf(75);
-        Score existing = new Score();
+        ScoreEntity existing = new ScoreEntity();
         existing.setScore(10.0);
         existing.setLastUpdate(LocalDate.of(2000, 1, 1));
 
         when(repository.findByClientCpf(cpf)).thenReturn(Optional.of(existing));
-        when(repository.save(any(Score.class))).thenAnswer(inv -> inv.getArgument(0));
+        when(repository.save(any(ScoreEntity.class))).thenAnswer(inv -> inv.getArgument(0));
 
         String result = service.updateScore(cpf, newVal);
 
         assertEquals(cpf, result);
         verify(repository, times(1)).save(scoreCaptor.capture());
-        Score saved = scoreCaptor.getValue();
+        ScoreEntity saved = scoreCaptor.getValue();
         assertEquals(newVal.doubleValue(), saved.getScore());
         assertEquals(LocalDate.now(), saved.getLastUpdate());
     }
@@ -62,17 +62,17 @@ class ScoreServiceImplTest {
     void updateScore_createsNewScoreWhenNotPresent() {
         String cpf = "55566677788";
         BigDecimal newVal = BigDecimal.valueOf(42);
-        Client client = new Client();
+        ClientEntity client = new ClientEntity();
 
         when(repository.findByClientCpf(cpf)).thenReturn(Optional.empty());
         when(clientRepository.findClientByCpf(cpf)).thenReturn(Optional.of(client));
-        when(repository.save(any(Score.class))).thenAnswer(inv -> inv.getArgument(0));
+        when(repository.save(any(ScoreEntity.class))).thenAnswer(inv -> inv.getArgument(0));
 
         String result = service.updateScore(cpf, newVal);
 
         assertEquals(cpf, result);
         verify(repository, times(1)).save(scoreCaptor.capture());
-        Score saved = scoreCaptor.getValue();
+        ScoreEntity saved = scoreCaptor.getValue();
         assertEquals(newVal.doubleValue(), saved.getScore());
         assertSame(client, saved.getClient());
     }
@@ -92,7 +92,7 @@ class ScoreServiceImplTest {
     @Test
     void findScoreByClientCpf_returnsScoreWhenFound() {
         String cpf = "99988877766";
-        Score s = new Score();
+        ScoreEntity s = new ScoreEntity();
         s.setId(1L);
         s.setScore(1000D);
         when(repository.findByClientCpf(cpf)).thenReturn(Optional.of(s));
