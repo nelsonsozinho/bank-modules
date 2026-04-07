@@ -41,6 +41,7 @@ dependencies {
     implementation("org.springframework.kafka:spring-kafka:3.3.10")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation("io.github.resilience4j:resilience4j-spring-boot3:2.4.0")
     implementation("org.flywaydb:flyway-core")
 	implementation("org.flywaydb:flyway-database-postgresql")
     implementation("org.apache.httpcomponents.core5:httpcore5:5.3.6")

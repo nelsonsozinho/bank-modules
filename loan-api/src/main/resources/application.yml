@@ -9,6 +9,11 @@ server:
     key-store-type: ${KEY_STORE_TYPE}
   port: 8282
 spring:
+  cloud:
+    openfeign:
+      circuitbreaker:
+        alphanumeric-ids:
+          enabled: true
   config:
     import: env.properties
   profiles:
@@ -50,3 +55,17 @@ api:
   score:
     url: ${SCORE_API:https://localhost:8080/score}
     name: score
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      validateRestrictions:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+  timelimiter:
+    instances:
+      validateRestrictions:
+        timeout-duration: 5000

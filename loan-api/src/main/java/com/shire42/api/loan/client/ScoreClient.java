@@ -16,6 +16,6 @@ import java.util.List;
 public interface ScoreClient {
 
     @GetMapping("/client/{cpf}")
-    ClientScore getScoreUser(@PathVariable("cpf") String cpf);
+    ClientScore getScoreUser(@PathVariable String cpf);
 
 }

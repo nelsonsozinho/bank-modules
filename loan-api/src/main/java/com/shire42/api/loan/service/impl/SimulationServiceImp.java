@@ -21,6 +21,7 @@ import com.shire42.api.loan.service.exception.ClientWithInsufficientScoreExcepti
 import com.shire42.api.loan.service.exception.ClientWithRestrictionsException;
 import com.shire42.api.loan.service.exception.ProductNotFoundException;
 import com.shire42.api.loan.service.exception.SimulationNotFoundException;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -139,6 +140,7 @@ public class SimulationServiceImp implements SimulationService {
         )).toList();
     }
 
+    @CircuitBreaker(name = "validateRestrictions")
     public void validateRestrictions(SimulationDto dto) {
         if(!availabilityClient.getRestrictionsByUser(dto.getCpf()).isEmpty()) {
             throw new ClientWithRestrictionsException(String.format("Client with cpf %s has restrictions", dto.getCpf()));
