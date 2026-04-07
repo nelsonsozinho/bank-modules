@@ -15,7 +15,7 @@ public class FindClientAdapter implements FindClientRepository {
 
     @Override
     public Client findClientByCpf(final String cpf) {
-        final ClientEntity clientEntity = clientRepository.findClientByCpf(cpf)
+        final ClientEntity clientEntity = clientRepository.findClientEntityByCpf(cpf)
                 .orElseThrow(() -> new RuntimeException("Client not found with CPF: " + cpf));
         return Client.builder()
                 .id(clientEntity.getId())

@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
 
-    Optional<ClientEntity> findClientByCpf(String cpf);
+    Optional<ClientEntity> findClientEntityByCpf(String cpf);
 
 }

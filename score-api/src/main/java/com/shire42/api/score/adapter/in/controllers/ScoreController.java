@@ -27,7 +27,7 @@ public class ScoreController {
 
 
     @GetMapping("/client/{cpf}")
-    public ResponseEntity<ScoreRestOut> getAccountByNumber(@PathVariable("cpf") final String cpf) {
+    public ResponseEntity<ScoreRestOut> getAccountByNumber(@PathVariable final String cpf) {
         var score = findScoreUseCase.findScoreByClientCpf(cpf);
         return ResponseEntity.ok(
                 ScoreRestOut.builder()
@@ -37,17 +37,13 @@ public class ScoreController {
                 .build());
     }
 
-    @PostMapping
-    public ResponseEntity<?> createNewScore(@RequestBody final ScoreRestInput input) throws URISyntaxException {
-        var score = newScoreUseCase.newScore(input.getCpf(), input.getScore());
-        return ResponseEntity.created(new URI("/score/client/" + score.getClient().getCpf())).build();
-    }
-
     @PutMapping
     public ResponseEntity<?> updateScore(@RequestBody final ScoreRestInput input) throws URISyntaxException {
-        String cpf = updateScoreUseCase.updateScore(input.getCpf(), input.getScore());
-        return ResponseEntity.created(new URI("/score/client/" + cpf)).build();
+        return ResponseEntity
+                .created(new URI("/score/client/" + updateScoreUseCase.updateScore(input.getCpf(), input.getScore())))
+                .build();
     }
+
 
 
 }

@@ -23,7 +23,7 @@ public class NewScoreAdapter implements NewScoreRepository {
     @Override
     public Score createNewScore(final Score score) {
         final String cpf = score.getClient().getCpf();
-        ClientEntity clientEntity = clientRepository.findClientByCpf(cpf)
+        ClientEntity clientEntity = clientRepository.findClientEntityByCpf(cpf)
                 .orElseThrow(() -> new RuntimeException("Client not found for CPF: " + cpf));
         ScoreEntity entity = new ScoreEntity();
         entity.setScore(score.getScore());

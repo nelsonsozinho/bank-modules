@@ -36,7 +36,7 @@ public class FindClientRepositoryTest {
         entity.setEmail("john.doe@mail.com");
         entity.setCpf(cpf);
 
-        when(clientRepository.findClientByCpf(cpf)).thenReturn(Optional.of(entity));
+        when(clientRepository.findClientEntityByCpf(cpf)).thenReturn(Optional.of(entity));
 
         Client result = findClientAdapter.findClientByCpf(cpf);
 
@@ -50,7 +50,7 @@ public class FindClientRepositoryTest {
     @Test
     void throwExceptionWhenClientIsNotFound() {
         String cpf = "99999999999";
-        when(clientRepository.findClientByCpf(cpf)).thenReturn(Optional.empty());
+        when(clientRepository.findClientEntityByCpf(cpf)).thenReturn(Optional.empty());
 
         RuntimeException result = assertThrows(RuntimeException.class,
                 () -> findClientAdapter.findClientByCpf(cpf));
